@@ -5,7 +5,7 @@ This file documents how to reproduce the main estimating data in Abigail Wozniak
 
 - **\Data_Setup**
   - **\1980Census_Data_Setup** – contains do-file and datasets that construct the final 1980 Census dataset.
-  - **\Inductions_Data_Setup** – contains do-file and datasets that construct the final inductions dataset (inductions.dta), as well as datasets that contain variations of measures of induction risk (see do-file for risk measures).
+  - **\Inductions_Data_Setup** – contains do-file and datasets that construct the final inductions dataset (**inductions.dta**), as well as datasets that contain variations of measures of induction risk (see do-file for risk measures).
   
 - **\Data**
   - **\Cleaned_Data** – contains folders that hold the cleaned 1980 Census file and cleaned state-level inductions and enrollment data files.
