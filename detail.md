@@ -1,5 +1,3 @@
-This file documents how to reproduce the main estimating data in Abigail Wozniak’s and Ofer Malamud’s “The Impact of college Education on Geographic Mobility,” published in the Journal of Human Resources (2012, 47(4): 913-950).
-
 ## Repository Structure
 *The repository is structured as follows:*
 
