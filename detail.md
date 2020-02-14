@@ -1,5 +1,5 @@
 ## Repository Structure
-*The repository is structured as follows:*
+*This repository contains the following directories:*
 
 - **\Data_Setup**
   - **\1980Census_Data_Setup** – contains do-file and data sets that construct the final 1980 Census data set.
@@ -12,9 +12,9 @@
 - **\Enr_PDF_YYYY_YY**
   - Original PDF versions of school enrollment data from 1960 to 1965.
 
-## 1980 Census Data Setup
+## 1980 Census Data 
 
-*The main 1980 Census data set and do-file:*
+*This folder contains Stata do-files and data to construct the main 1980 Census estimating sample in Table 1 of the paper using raw Census data downloaded from IPUMS.org. It contains the following files:*
 
 - **census_1980.dta** – raw 1980 Census 5% Sample from IPUMS. The sample is restricted to men aged 25 to 40.
 - **census1980_clean.do** – cleans **census_1980.dta** and merges cohort size, employment-population, and induction data to create one of the final 1980 Census data sets (**census1980_cleaned.dta**). The do-file also creates Table 1 before saving **census1980_cleaned.dta**. The following files are merged in to create the final dat aset:
@@ -22,9 +22,9 @@
   -	**cohortsize_c60.dta** – 1960 cohort size at the birthyear and statebirthyear level (lnsize and lnstatesize) sorted by bplg and birthyear.
   - **inductions_short6m.dta** – a short version of **inductions.dta** (containing only birthyear, bplg, staterisk, nationalrisk, nationalrisk_, and risk)
 
-## Induction Risk Data Setup
+## Induction Risk Data 
 
-*The main Stata data sets and the do-file used to create our measures of induction risk:*
+*This folder contains Stata do-files and data to create our birth state - birth year measures of Vietnam conflict induction risk:*
 
 - **inductionrisk_setup3.do** – generates national-level and state-level induction risk by birth year and by six-month birth interval. Creates data sets with various definitions of induction risk. 
   - *This do-file uses the following data sets:*
