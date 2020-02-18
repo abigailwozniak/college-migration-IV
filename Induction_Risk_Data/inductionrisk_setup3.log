@@ -1,8 +1,8 @@
------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  H:\Other\Induction Data for Sharing\inductionrisk_setup3.log
+       log:  H:\Other\Paper Codes for Uploading\education-migration-IV\Induction_Risk_Data\inductionrisk_setup3.log
   log type:  text
- opened on:  12 Dec 2019, 10:16:50
+ opened on:  18 Feb 2020, 09:39:01
 
 . 
 . ************** create national and state-level induction risk *******************
@@ -18,8 +18,7 @@
 . * nationalrisk6m
 . * nationalrisk6m_
 . *
-. * Using biannual variation but alternate averaging method of total inductions over total coho
-> rt size
+. * Using biannual variation but alternate averaging method of total inductions over total cohort size
 . * staterisk6mt
 . * nationalrisk6mt
 . * nationalrisk6mt_
@@ -29,14 +28,11 @@
 . * nationalrisk6ma
 . * nationalrisk6ma_
 . *
-. * Notes: We have induction totals from 1955 to 1972, annual up to 1966, every six months for 
-> '67 on.
+. * Notes: We have induction totals from 1955 to 1972, annual up to 1966, every six months for '67 on.
 . * We have state level enrollments at age 17 for 1961 on.
 . * Therefore we can compute national risk for 1955-71 and state level risk for 1961-1972.
-. * Year of state enrollments has been adjusted to match year of inductions, so enrollments in 
-> 1961 were
-. * the number of 17 year olds in a state two years prior. Inductions in 1971 were actual numbe
-> rs inducted in 1971.
+. * Year of state enrollments has been adjusted to match year of inductions, so enrollments in 1961 were
+. * the number of 17 year olds in a state two years prior. Inductions in 1971 were actual numbers inducted in 1971.
 . *
 . ***
 . 
@@ -45,8 +41,7 @@
 
 . set mem 100m
 set memory ignored.
-    Memory no longer needs to be set in modern Statas; memory adjustments are performed on
-    the fly automatically.
+    Memory no longer needs to be set in modern Statas; memory adjustments are performed on the fly automatically.
 
 . set more off
 
@@ -116,8 +111,7 @@ file temp.dta saved
 . gen byte ind1975=0
 
 . reshape long ind enr, i(id state abbrev) j(birthyear)
-(note: j = 1955 1956 1957 1958 1959 1960 1961 1962 1963 1964 1965 1966 1967 1968 1969 1970 1971
->  1972 1973 1974 1975)
+(note: j = 1955 1956 1957 1958 1959 1960 1961 1962 1963 1964 1965 1966 1967 1968 1969 1970 1971 1972 1973 1974 1975)
 (note: enr1955 not found)
 (note: enr1956 not found)
 (note: enr1957 not found)
@@ -187,8 +181,7 @@ xij variables:
 
 . 
 . ******** restrict to 1942-53 **********
-. * NOTE dropping gets rid of any later birthyears that have wrong totals due to non-restrictio
-> n of forward sums above
+. * NOTE dropping gets rid of any later birthyears that have wrong totals due to non-restriction of forward sums above
 . drop if birthyear<1942 | birthyear>1953
 (300 observations deleted)
 
@@ -319,8 +312,7 @@ nationalri~_ |        600    .0602727     .035252   .0038362   .1132613
      enr1972 |         50     62418.1    64291.82       4395     319994
 
 . 
-. **** reshape annual inductions and enrollment data into 6 month level data for each state and
->  year combo ***
+. **** reshape annual inductions and enrollment data into 6 month level data for each state and year combo ***
 . gen int id=_n
 
 . 
@@ -356,9 +348,8 @@ nationalri~_ |        600    .0602727     .035252   .0038362   .1132613
 . *summ
 . 
 . reshape long ind enr, i(id state abbrev) j(birthyear)
-(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 
-> 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682 19691 196
-> 92 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
+(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682
+>  19691 19692 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
 (note: enr19551 not found)
 (note: enr19552 not found)
 (note: enr19561 not found)
@@ -446,16 +437,13 @@ xij variables:
 . **** create national-level risk from the state data ***
 . sort statefip birthyear6m
 
-. by statefip: gen avg_ind6m= (ind+ind[_n+1]+ind[_n+2]+ind[_n+3]+ind[_n+4]+ind[_n+5]+ind[_n+6]+
-> ind[_n+7])/ 8
+. by statefip: gen avg_ind6m= (ind+ind[_n+1]+ind[_n+2]+ind[_n+3]+ind[_n+4]+ind[_n+5]+ind[_n+6]+ind[_n+7])/ 8
 (350 missing values generated)
 
-. gen avg_tot_ind6m= (ind_tot6m+ind_tot6m[_n+1]+ind_tot6m[_n+2]+ind_tot6m[_n+3]+ind_tot6m[_n+4]
-> +ind_tot6m[_n+5]+ind_tot6m[_n+6]+ind_tot6m[_n+7])/ 8
+. gen avg_tot_ind6m= (ind_tot6m+ind_tot6m[_n+1]+ind_tot6m[_n+2]+ind_tot6m[_n+3]+ind_tot6m[_n+4]+ind_tot6m[_n+5]+ind_tot6m[_n+6]+ind_tot6m[_n+7])/ 8
 (7 missing values generated)
 
-. gen avg_tot_ind6m_= (ind_tot6m_+ind_tot6m_[_n+1]+ind_tot6m_[_n+2]+ind_tot6m_[_n+3]+ind_tot6m_
-> [_n+4]+ind_tot6m_[_n+5]+ind_tot6m_[_n+6]+ind_tot6m_[_n+7])/ 8
+. gen avg_tot_ind6m_= (ind_tot6m_+ind_tot6m_[_n+1]+ind_tot6m_[_n+2]+ind_tot6m_[_n+3]+ind_tot6m_[_n+4]+ind_tot6m_[_n+5]+ind_tot6m_[_n+6]+ind_tot6m_[_n+7])/ 8
 (7 missing values generated)
 
 . drop if avg_ind6m==.
@@ -491,6 +479,7 @@ xij variables:
 . sort bplg birthyear6m
 
 . save inductions_short6m, replace
+(note: file inductions_short6m.dta not found)
 file inductions_short6m.dta saved
 
 . 
@@ -567,8 +556,7 @@ nationalri~_ |      1,200    .0598354    .0371792   .0027006   .1132613
      enr1972 |         50     62418.1    64291.82       4395     319994
 
 . 
-. **** reshape annual inductions and enrollment data into 6 month level data for each state and
->  year combo ***
+. **** reshape annual inductions and enrollment data into 6 month level data for each state and year combo ***
 . gen int id=_n
 
 . 
@@ -604,9 +592,8 @@ nationalri~_ |      1,200    .0598354    .0371792   .0027006   .1132613
 . *summ
 . 
 . reshape long ind enr, i(id state abbrev) j(birthyear)
-(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 
-> 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682 19691 196
-> 92 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
+(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682
+>  19691 19692 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
 (note: enr19551 not found)
 (note: enr19552 not found)
 (note: enr19561 not found)
@@ -694,16 +681,14 @@ xij variables:
 . **** create national-level risk from the state data ***
 . sort statefip birthyear6m
 
-. by statefip: gen avg_ind6m= (0.5*(ind+ind[_n+1])+0.25*(ind[_n+2]+ind[_n+3])+0.15*(ind[_n+4]+i
-> nd[_n+5])+0.10*(ind[_n+6]+ind[_n+7]))/ 8
+. by statefip: gen avg_ind6m= (0.5*(ind+ind[_n+1])+0.25*(ind[_n+2]+ind[_n+3])+0.15*(ind[_n+4]+ind[_n+5])+0.10*(ind[_n+6]+ind[_n+7]))/ 8
 (350 missing values generated)
 
-. gen avg_tot_ind6m= (0.5*(ind_tot6m+ind_tot6m[_n+1])+0.25*(ind_tot6m[_n+2]+ind_tot6m[_n+3])+0.
-> 15*(ind_tot6m[_n+4]+ind_tot6m[_n+5])+0.10*(ind_tot6m[_n+6]+ind_tot6m[_n+7]))/ 8
+. gen avg_tot_ind6m= (0.5*(ind_tot6m+ind_tot6m[_n+1])+0.25*(ind_tot6m[_n+2]+ind_tot6m[_n+3])+0.15*(ind_tot6m[_n+4]+ind_tot6m[_n+5])+0.10*(ind_tot6m[_n+6]+ind_tot6m[_n+7]))/ 8
 (7 missing values generated)
 
-. gen avg_tot_ind6m_= (0.5*(ind_tot6m_+ind_tot6m_[_n+1])+0.25*(ind_tot6m_[_n+2]+ind_tot6m_[_n+3
-> ])+0.15*(ind_tot6m_[_n+4]+ind_tot6m_[_n+5])+0.10*(ind_tot6m_[_n+6]+ind_tot6m_[_n+7]))/ 8
+. gen avg_tot_ind6m_= (0.5*(ind_tot6m_+ind_tot6m_[_n+1])+0.25*(ind_tot6m_[_n+2]+ind_tot6m_[_n+3])+0.15*(ind_tot6m_[_n+4]+ind_tot6m_[_n+5])+0.10*(ind_tot6m_[_n+6]+ind_tot6m_[_n+7]
+> ))/ 8
 (7 missing values generated)
 
 . drop if avg_ind6m==.
@@ -763,8 +748,7 @@ nationalri~_ |      1,200    .0152009    .0085146   .0013503   .0295397
 . use state_inductions_aw
 
 . 
-. **** reshape annual inductions and enrollment data into 6 month level data for each state and
->  year combo ***
+. **** reshape annual inductions and enrollment data into 6 month level data for each state and year combo ***
 . gen int id=_n
 
 . 
@@ -798,9 +782,8 @@ nationalri~_ |      1,200    .0152009    .0085146   .0013503   .0295397
 
 . 
 . reshape long ind enr, i(id state abbrev) j(birthyear)
-(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 
-> 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682 19691 196
-> 92 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
+(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682
+>  19691 19692 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
 (note: enr19551 not found)
 (note: enr19552 not found)
 (note: enr19561 not found)
@@ -887,32 +870,26 @@ xij variables:
 . **** create national-level risk from the state data ***
 . sort statefip birthyear6m
 
-. by statefip: gen all_ind6m = (ind+ind[_n+1]+ind[_n+2]+ind[_n+3]+ind[_n+4]+ind[_n+5]+ind[_n+6]
-> +ind[_n+7])
+. by statefip: gen all_ind6m = (ind+ind[_n+1]+ind[_n+2]+ind[_n+3]+ind[_n+4]+ind[_n+5]+ind[_n+6]+ind[_n+7])
 (350 missing values generated)
 
-. gen all_tot_ind6m = (ind_tot6m+ind_tot6m[_n+1]+ind_tot6m[_n+2]+ind_tot6m[_n+3]+ind_tot6m[_n+4
-> ]+ind_tot6m[_n+5]+ind_tot6m[_n+6]+ind_tot6m[_n+7])
+. gen all_tot_ind6m = (ind_tot6m+ind_tot6m[_n+1]+ind_tot6m[_n+2]+ind_tot6m[_n+3]+ind_tot6m[_n+4]+ind_tot6m[_n+5]+ind_tot6m[_n+6]+ind_tot6m[_n+7])
 (7 missing values generated)
 
-. gen all_tot_ind6m_ = (ind_tot6m_+ind_tot6m_[_n+1]+ind_tot6m_[_n+2]+ind_tot6m_[_n+3]+ind_tot6m
-> _[_n+4]+ind_tot6m_[_n+5]+ind_tot6m_[_n+6]+ind_tot6m_[_n+7])
+. gen all_tot_ind6m_ = (ind_tot6m_+ind_tot6m_[_n+1]+ind_tot6m_[_n+2]+ind_tot6m_[_n+3]+ind_tot6m_[_n+4]+ind_tot6m_[_n+5]+ind_tot6m_[_n+6]+ind_tot6m_[_n+7])
 (7 missing values generated)
 
 . drop if all_ind6m ==.
 (350 observations deleted)
 
 . 
-. by statefip: gen all_enr6m = (enr+enr[_n+1]+enr[_n+2]+enr[_n+3]+enr[_n+4]+enr[_n+5]+enr[_n+6]
-> +enr[_n+7])
+. by statefip: gen all_enr6m = (enr+enr[_n+1]+enr[_n+2]+enr[_n+3]+enr[_n+4]+enr[_n+5]+enr[_n+6]+enr[_n+7])
 (950 missing values generated)
 
-. gen all_tot_enr6m = (enr_tot6m+enr_tot6m[_n+1]+enr_tot6m[_n+2]+enr_tot6m[_n+3]+enr_tot6m[_n+4
-> ]+enr_tot6m[_n+5]+enr_tot6m[_n+6]+enr_tot6m[_n+7])
+. gen all_tot_enr6m = (enr_tot6m+enr_tot6m[_n+1]+enr_tot6m[_n+2]+enr_tot6m[_n+3]+enr_tot6m[_n+4]+enr_tot6m[_n+5]+enr_tot6m[_n+6]+enr_tot6m[_n+7])
 (7 missing values generated)
 
-. gen all_tot_enr6m_ = (enr_tot6m_+enr_tot6m_[_n+1]+enr_tot6m_[_n+2]+enr_tot6m_[_n+3]+enr_tot6m
-> _[_n+4]+enr_tot6m_[_n+5]+enr_tot6m_[_n+6]+enr_tot6m_[_n+7])
+. gen all_tot_enr6m_ = (enr_tot6m_+enr_tot6m_[_n+1]+enr_tot6m_[_n+2]+enr_tot6m_[_n+3]+enr_tot6m_[_n+4]+enr_tot6m_[_n+5]+enr_tot6m_[_n+6]+enr_tot6m_[_n+7])
 (950 missing values generated)
 
 . 
@@ -988,8 +965,7 @@ nationalri~_ |          0
 . use state_inductions_aw
 
 . 
-. **** reshape annual inductions and enrollment data into 6 month level data for each state and
->  year combo ***
+. **** reshape annual inductions and enrollment data into 6 month level data for each state and year combo ***
 . gen int id=_n
 
 . 
@@ -1039,9 +1015,8 @@ nationalri~_ |          0
 
 . 
 . reshape long ind enr, i(id state abbrev) j(birthyear)
-(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 
-> 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682 19691 196
-> 92 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
+(note: j = 19551 19552 19561 19562 19571 19572 19581 19582 19591 19592 19601 19602 19611 19612 19621 19622 19631 19632 19641 19642 19651 19652 19661 19662 19671 19672 19681 19682
+>  19691 19692 19701 19702 19711 19712 19721 19722 19731 19732 19741 19742 19751 19752 19761)
 (note: enr19551 not found)
 (note: enr19552 not found)
 (note: enr19561 not found)
@@ -1131,15 +1106,13 @@ xij variables:
 (600 missing values generated)
 
 . 
-. by statefip: gen staterisk6ma = (sr+sr[_n+1]+sr[_n+2]+sr[_n+3]+sr[_n+4]+sr[_n+5]+sr[_n+6]+sr[
-> _n+7])/8
+. by statefip: gen staterisk6ma = (sr+sr[_n+1]+sr[_n+2]+sr[_n+3]+sr[_n+4]+sr[_n+5]+sr[_n+6]+sr[_n+7])/8
 (950 missing values generated)
 
 . gen nationalrisk6ma = (nr+nr[_n+1]+nr[_n+2]+nr[_n+3]+nr[_n+4]+nr[_n+5]+nr[_n+6]+nr[_n+7])/8
 (950 missing values generated)
 
-. gen nationalrisk6ma_ = (nr_+nr_[_n+1]+nr_[_n+2]+nr_[_n+3]+nr_[_n+4]+nr_[_n+5]+nr_[_n+6]+nr_[_
-> n+7])/8
+. gen nationalrisk6ma_ = (nr_+nr_[_n+1]+nr_[_n+2]+nr_[_n+3]+nr_[_n+4]+nr_[_n+5]+nr_[_n+6]+nr_[_n+7])/8
 (950 missing values generated)
 
 . 
@@ -1179,7 +1152,7 @@ nationalri~_ |      1,200     .056949    .0335441   .0027006   .1101135
 . 
 . log close
       name:  <unnamed>
-       log:  H:\Other\Induction Data for Sharing\inductionrisk_setup3.log
+       log:  H:\Other\Paper Codes for Uploading\education-migration-IV\Induction_Risk_Data\inductionrisk_setup3.log
   log type:  text
- closed on:  12 Dec 2019, 10:16:52
------------------------------------------------------------------------------------------------
+ closed on:  18 Feb 2020, 09:39:02
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
