@@ -1,11 +1,12 @@
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  H:\Other\Paper Codes for Uploading\education-migration-IV\1980_Census_Data\census1980_clean.log
+       log:  H:\Other\Induction Data for Sharing\census1980_clean.log
   log type:  text
- opened on:  18 Feb 2020, 09:40:44
+ opened on:   6 Jan 2020, 15:56:47
 
 . 
 . ********************************************************************************
+. *Author: Zach Swaziek
 . *Date: January 2020
 . *
 . *This do-file recreates Table 1 in "The Impact of College on Migration:
@@ -20,12 +21,562 @@
 . *Output: Table 1: Summary Statistics for 1980 Census
 . ********************************************************************************
 . 
-. use census_1980.dta
-file census_1980.dta not found
-r(601);
+. use "H:\Other\Induction Data for Sharing\census_1980.dta" 
 
-end of do-file
+. 
+. rename birthyr birthyear
 
-r(601);
+. 
+. gen bplg =  bpl
 
-. exit, clear
+. 
+. ***COHORT SIZE MERGE************************************************************
+. 
+. merge m:1 birthyear bplg using "H:\Other\Induction Data for Sharing\cohortsize_c60"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        20,056
+        from master                    12,332  (_merge==1)
+        from using                      7,724  (_merge==2)
+
+    matched                         1,306,371  (_merge==3)
+    -----------------------------------------
+
+. drop if _merge == 2 | _merge == 1
+(20,056 observations deleted)
+
+. drop _merge
+
+. 
+. ***EPOP MERGE*******************************************************************
+. 
+. *Variable for year turned 19
+. gen year19 = birthyear + 19
+
+. merge m:1 year19 bplg using "H:\Other\Induction Data for Sharing\blanchard_katz"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        98,177
+        from master                    96,290  (_merge==1)
+        from using                      1,887  (_merge==2)
+
+    matched                         1,210,081  (_merge==3)
+    -----------------------------------------
+
+. drop if _merge == 2 | _merge == 1
+(98,177 observations deleted)
+
+. drop _merge
+
+. 
+. ***GROUP QUARTERS***************************************************************
+. 
+. fre gqtype
+
+gqtype -- group quarters type [general version]
+------------------------------------------------------------------------------------------------------
+                                                         |      Freq.    Percent      Valid       Cum.
+---------------------------------------------------------+--------------------------------------------
+Valid   0 na (non-group quarters households)             |    1185602      97.98      97.98      97.98
+        2 correctional institutions                      |       9933       0.82       0.82      98.80
+        3 mental institutions                            |       2179       0.18       0.18      98.98
+        4 institutions for the elderly, handicapped, and |       2693       0.22       0.22      99.20
+          poor                                           |                                            
+        6 military                                       |       4636       0.38       0.38      99.58
+        7 college dormitory                              |       1485       0.12       0.12      99.71
+        8 rooming house                                  |       1254       0.10       0.10      99.81
+        9 other non-institutional gq and unknown         |       2299       0.19       0.19     100.00
+        Total                                            |    1210081     100.00     100.00           
+------------------------------------------------------------------------------------------------------
+
+. *Drop group quarters 
+. drop if gq == 3 | gq == 4
+(24,479 observations deleted)
+
+. 
+. ***BIRTH YEAR*******************************************************************
+. 
+. *Drop if born outside of 1942-1953 (restrictions from paper)
+. drop if birthyear < 1942 | birthyear > 1953
+(264,273 observations deleted)
+
+. 
+. fre birthqtr
+
+birthqtr -- quarter of birth
+----------------------------------------------------------------------
+                         |      Freq.    Percent      Valid       Cum.
+-------------------------+--------------------------------------------
+Valid   1 jan-feb-march  |     224066      24.32      24.32      24.32
+        2 april-may-june |     218591      23.73      23.73      48.05
+        3 july-aug-sept  |     244173      26.50      26.50      74.55
+        4 oct-nov-dec    |     234499      25.45      25.45     100.00
+        Total            |     921329     100.00     100.00           
+----------------------------------------------------------------------
+
+. *Create variable to split up year into two halves
+. gen birthhalf = 1
+
+. replace birthhalf = 2 if birthqtr == 3 | birthqtr == 4
+(478,672 real changes made)
+
+. 
+. tostring birthyear, gen(biyr)
+biyr generated as str4
+
+. tostring birthhalf, gen(bihf)
+bihf generated as str1
+
+. gen birthyear6m1 = biyr + bihf
+
+. destring birthyear6m1, gen(birthyear6m)
+birthyear6m1: all characters numeric; birthyear6m generated as int
+
+. drop biyr bihf birthyear6m1
+
+. 
+. ***BIRTHPLACE/MIGRATION*********************************************************
+. 
+. fre bpl
+
+bpl -- birthplace [general version]
+-----------------------------------------------------------------------------
+                                |      Freq.    Percent      Valid       Cum.
+--------------------------------+--------------------------------------------
+Valid   1  alabama              |      20569       2.23       2.23       2.23
+        2  alaska               |        896       0.10       0.10       2.33
+        4  arizona              |       5352       0.58       0.58       2.91
+        5  arkansas             |      12545       1.36       1.36       4.27
+        6  california           |      60830       6.60       6.60      10.87
+        8  colorado             |       8699       0.94       0.94      11.82
+        9  connecticut          |      11141       1.21       1.21      13.03
+        10 delaware             |       1856       0.20       0.20      13.23
+        11 district of columbia |       5032       0.55       0.55      13.78
+        12 florida              |      15876       1.72       1.72      15.50
+        13 georgia              |      23204       2.52       2.52      18.02
+        15 hawaii               |       3698       0.40       0.40      18.42
+        16 idaho                |       4257       0.46       0.46      18.88
+        17 illinois             |      48902       5.31       5.31      24.19
+        18 indiana              |      24476       2.66       2.66      26.85
+        19 iowa                 |      16135       1.75       1.75      28.60
+        20 kansas               |      11575       1.26       1.26      29.85
+        21 kentucky             |      20089       2.18       2.18      32.03
+        22 louisiana            |      18699       2.03       2.03      34.06
+        23 maine                |       5571       0.60       0.60      34.67
+        :                       |          :          :          :          :
+        35 new mexico           |       5330       0.58       0.58      54.54
+        36 new york             |      77900       8.46       8.46      62.99
+        37 north carolina       |      27400       2.97       2.97      65.97
+        38 north dakota         |       4375       0.47       0.47      66.44
+        39 ohio                 |      48244       5.24       5.24      71.68
+        40 oklahoma             |      13722       1.49       1.49      73.17
+        41 oregon               |       9009       0.98       0.98      74.15
+        42 pennsylvania         |      59549       6.46       6.46      80.61
+        44 rhode island         |       4381       0.48       0.48      81.09
+        45 south carolina       |      14829       1.61       1.61      82.70
+        46 south dakota         |       4259       0.46       0.46      83.16
+        47 tennessee            |      21350       2.32       2.32      85.48
+        48 texas                |      52804       5.73       5.73      91.21
+        49 utah                 |       5855       0.64       0.64      91.84
+        50 vermont              |       2425       0.26       0.26      92.10
+        51 virginia             |      20990       2.28       2.28      94.38
+        53 washington           |      14734       1.60       1.60      95.98
+        54 west virginia        |      13545       1.47       1.47      97.45
+        55 wisconsin            |      21540       2.34       2.34      99.79
+        56 wyoming              |       1930       0.21       0.21     100.00
+        Total                   |     921329     100.00     100.00           
+-----------------------------------------------------------------------------
+
+. *Drop if born outside the U.S. or born in D.C.
+. drop if bpl > 56 | bpl == 11
+(5,032 observations deleted)
+
+. *Drop if living in DC
+. drop if statefip == 11 
+(1,865 observations deleted)
+
+. *Create variable for if living outside birth state (1), or living in same (0)
+. gen moved_bpl = 0
+
+. replace moved_bpl = 1 if bpl != statefip 
+(329,006 real changes made)
+
+. lab var moved_bpl "Living outside of birth state"
+
+. 
+. fre citizen
+
+citizen -- citizenship status
+-----------------------------------------------------------
+              |      Freq.    Percent      Valid       Cum.
+--------------+--------------------------------------------
+Valid   0 n/a |     914432     100.00     100.00     100.00
+-----------------------------------------------------------
+
+. *keep if citizen == 0
+. 
+. ***EDUCATION********************************************************************
+. 
+. fre educd
+
+educd -- educational attainment [detailed version]
+----------------------------------------------------------------------------------------------
+                                                 |      Freq.    Percent      Valid       Cum.
+-------------------------------------------------+--------------------------------------------
+Valid   2   no schooling completed               |       2179       0.24       0.24       0.24
+        11  nursery school, preschool            |         97       0.01       0.01       0.25
+        12  kindergarten                         |        290       0.03       0.03       0.28
+        14  grade 1                              |        451       0.05       0.05       0.33
+        15  grade 2                              |        857       0.09       0.09       0.42
+        16  grade 3                              |       1034       0.11       0.11       0.54
+        17  grade 4                              |       1557       0.17       0.17       0.71
+        22  grade 5                              |       2237       0.24       0.24       0.95
+        23  grade 6                              |       5111       0.56       0.56       1.51
+        25  grade 7                              |       8965       0.98       0.98       2.49
+        26  grade 8                              |      20464       2.24       2.24       4.73
+        30  grade 9                              |      25244       2.76       2.76       7.49
+        40  grade 10                             |      31568       3.45       3.45      10.94
+        50  grade 11                             |      32283       3.53       3.53      14.47
+        60  grade 12                             |     291366      31.86      31.86      46.34
+        65  some college, but less than 1 year   |      28879       3.16       3.16      49.49
+        70  1 year of college                    |      74570       8.15       8.15      57.65
+        80  2 years of college                   |      93371      10.21      10.21      67.86
+        90  3 years of college                   |      43900       4.80       4.80      72.66
+        100 4 years of college                   |     127125      13.90      13.90      86.56
+        110 5+ years of college                  |      39288       4.30       4.30      90.86
+        111 6 years of college (6+ in 1960-1970) |      34048       3.72       3.72      94.58
+        112 7 years of college                   |      24214       2.65       2.65      97.23
+        113 8+ years of college                  |      25334       2.77       2.77     100.00
+        Total                                    |     914432     100.00     100.00           
+----------------------------------------------------------------------------------------------
+
+. 
+. *Create variable for years of schooling
+. gen school_yrs = 0
+
+. replace school_yrs = 1 if educd == 14
+(451 real changes made)
+
+. replace school_yrs = 2 if educd == 15
+(857 real changes made)
+
+. replace school_yrs = 3 if educd == 16
+(1,034 real changes made)
+
+. replace school_yrs = 4 if educd == 17
+(1,557 real changes made)
+
+. replace school_yrs = 5 if educd == 22
+(2,237 real changes made)
+
+. replace school_yrs = 6 if educd == 23
+(5,111 real changes made)
+
+. replace school_yrs = 7 if educd == 25
+(8,965 real changes made)
+
+. replace school_yrs = 8 if educd == 26
+(20,464 real changes made)
+
+. replace school_yrs = 9 if educd == 30
+(25,244 real changes made)
+
+. replace school_yrs = 10 if educd == 40
+(31,568 real changes made)
+
+. replace school_yrs = 11 if educd == 50
+(32,283 real changes made)
+
+. replace school_yrs = 12 if educd == 60
+(291,366 real changes made)
+
+. replace school_yrs = 12 if educd == 65
+(28,879 real changes made)
+
+. replace school_yrs = 13 if educd == 70
+(74,570 real changes made)
+
+. replace school_yrs = 14 if educd == 80
+(93,371 real changes made)
+
+. replace school_yrs = 15 if educd == 90
+(43,900 real changes made)
+
+. replace school_yrs = 16 if educd == 100
+(127,125 real changes made)
+
+. replace school_yrs = 17 if educd == 110
+(39,288 real changes made)
+
+. replace school_yrs = 18 if educd == 111
+(34,048 real changes made)
+
+. replace school_yrs = 19 if educd == 112
+(24,214 real changes made)
+
+. replace school_yrs = 20 if educd == 113
+(25,334 real changes made)
+
+. lab var school_yrs "Years of schooling"
+
+. 
+. *Create variable for years of college
+. gen coll_yrs = 0
+
+. replace coll_yrs = 0 if educd == 65
+(0 real changes made)
+
+. replace coll_yrs = 1 if educd == 70
+(74,570 real changes made)
+
+. replace coll_yrs = 2 if educd == 80
+(93,371 real changes made)
+
+. replace coll_yrs = 3 if educd == 90
+(43,900 real changes made)
+
+. replace coll_yrs = 4 if educd == 100
+(127,125 real changes made)
+
+. replace coll_yrs = 5 if educd == 110
+(39,288 real changes made)
+
+. replace coll_yrs = 6 if educd == 111
+(34,048 real changes made)
+
+. replace coll_yrs = 7 if educd == 112
+(24,214 real changes made)
+
+. replace coll_yrs = 8 if educd == 113
+(25,334 real changes made)
+
+. lab var coll_yrs "Years of college"
+
+. 
+. *Create variable that equals 1 if have some college or more, 0 if not
+. gen coll_atd = 0
+
+. replace coll_atd = 1 if educd >= 65
+(490,729 real changes made)
+
+. lab var coll_atd "College attendance"
+
+. 
+. *Create var for college completion (if have 4 years of college or more)
+. gen coll_compl = 0
+
+. replace coll_compl = 1 if school_yrs >= 16
+(250,009 real changes made)
+
+. lab var coll_compl "College completion"
+
+. 
+. ***RACE*************************************************************************
+. 
+. fre raced
+
+raced -- race [detailed version]
+-----------------------------------------------------------------------------------------------------
+                                                        |      Freq.    Percent      Valid       Cum.
+--------------------------------------------------------+--------------------------------------------
+Valid   100 white                                       |     799409      87.42      87.42      87.42
+        110 spanish write_in                            |      11010       1.20       1.20      88.63
+        200 black/african american/negro                |      90507       9.90       9.90      98.52
+        300 american indian/alaska native               |       6410       0.70       0.70      99.22
+        400 chinese                                     |       1146       0.13       0.13      99.35
+        500 japanese                                    |       2266       0.25       0.25      99.60
+        600 filipino                                    |        752       0.08       0.08      99.68
+        610 asian indian (hindu 1920_1940)              |         91       0.01       0.01      99.69
+        620 korean                                      |         83       0.01       0.01      99.70
+        630 hawaiian                                    |        751       0.08       0.08      99.78
+        640 vietnamese                                  |         19       0.00       0.00      99.78
+        650 other asian or pacific islander (1920,1980) |         72       0.01       0.01      99.79
+        700 other race, n.e.c                           |       1916       0.21       0.21     100.00
+        Total                                           |     914432     100.00     100.00           
+-----------------------------------------------------------------------------------------------------
+
+. *Create variable that equals 1 if Black, 0 if not
+. gen black = 0
+
+. replace black = 1 if raced == 200
+(90,507 real changes made)
+
+. lab var black "Black"
+
+. 
+. *Create variable that equals 1 if other non-white, 0 if not
+. *Non-white includes spanish write_in (coded as 110 in raced)
+. gen other_nw = 0
+
+. replace other_nw = 1 if raced == 110 | raced > 200 | hispand != 0
+(43,873 real changes made)
+
+. lab var other_nw "Other nonwhite"
+
+. 
+. ***VETERAN STATUS***************************************************************
+. 
+. fre vetstatd
+
+vetstatd -- veteran status [detailed version]
+---------------------------------------------------------------------------------
+                                    |      Freq.    Percent      Valid       Cum.
+------------------------------------+--------------------------------------------
+Valid   11 no military service      |     591991      64.74      64.74      64.74
+        12 currently on active duty |      18772       2.05       2.05      66.79
+        20 veteran                  |     303669      33.21      33.21     100.00
+        Total                       |     914432     100.00     100.00           
+---------------------------------------------------------------------------------
+
+. gen veteran = 0
+
+. replace veteran = 1 if vetstatd == 20
+(303,669 real changes made)
+
+. lab var veteran "Veteran status"
+
+. 
+. preserve
+
+. 
+. ***DROPPING BY DATA QUALITY FLAGS***********************************************
+.  
+. *https://usa.ipums.org/usa/flags.shtml
+. *Greater than 3 is a "hot deck allocation," which means was allocated
+. *based on similar household
+. *qage qsex qbpl qeduc qempstat qvetper within 102
+. *qage qeduc qvetstat qbpl - best guess!
+. foreach y in qage qeduc qvetstat qbpl {
+  2. fre `y' 
+  3. drop if `y' > 2
+  4. }
+
+qage -- flag for age
+--------------------------------------------------------------------------
+                             |      Freq.    Percent      Valid       Cum.
+-----------------------------+--------------------------------------------
+Valid   0 entered as written |     899381      98.35      98.35      98.35
+        4 allocated          |      15051       1.65       1.65     100.00
+        Total                |     914432     100.00     100.00           
+--------------------------------------------------------------------------
+(15,051 observations deleted)
+
+qeduc -- flag for educrec, higrade, educ99
+--------------------------------------------------------------------------------------------------------
+                                                           |      Freq.    Percent      Valid       Cum.
+-----------------------------------------------------------+--------------------------------------------
+Valid   0 original entry or inapplicable (not in universe) |     833322      92.66      92.66      92.66
+        3 failed edit/missing                              |      24629       2.74       2.74      95.39
+        4 consistency edit                                 |      41430       4.61       4.61     100.00
+        Total                                              |     899381     100.00     100.00           
+--------------------------------------------------------------------------------------------------------
+(66,059 observations deleted)
+
+qvetstat -- flag for vetstat, vet55x64, vet75x80, vet80x90, vet90x95, vetkorea, vetother, ve
+--------------------------------------------------------------------------------------------------------
+                                                           |      Freq.    Percent      Valid       Cum.
+-----------------------------------------------------------+--------------------------------------------
+Valid   0 original entry or inapplicable (not in universe) |     804277      96.51      96.51      96.51
+        3 missing                                          |      13433       1.61       1.61      98.13
+        4 allocated                                        |      15612       1.87       1.87     100.00
+        Total                                              |     833322     100.00     100.00           
+--------------------------------------------------------------------------------------------------------
+(29,045 observations deleted)
+
+qbpl -- flag for bpl, nativity
+-------------------------------------------------------------------------------------------------------
+                                                          |      Freq.    Percent      Valid       Cum.
+----------------------------------------------------------+--------------------------------------------
+Valid   0 entered as written                              |     792821      98.58      98.58      98.58
+        1 specific u.s. state or foreign country of birth |        225       0.03       0.03      98.60
+          pre-edited or not reported (1980 puerto rico)   |                                            
+        3 consistency edit                                |        390       0.05       0.05      98.65
+        4 allocated                                       |      10841       1.35       1.35     100.00
+        Total                                             |     804277     100.00     100.00           
+-------------------------------------------------------------------------------------------------------
+(11,231 observations deleted)
+
+. 
+. *For population variable
+. gen i = 1
+
+. 
+. *Variable for population by halfyear-birthyear-birthplace
+. *Will be used to weight averages/standard deviations
+. bysort bpl birthyear birthhalf: egen bpl_byr_bh_pop = total(i)
+
+. 
+. *Uncollapsed summaries
+. sum moved_bpl school_yrs coll_yrs coll_compl coll_atd veteran age ///
+>                  black other_nw
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   moved_bpl |    793,046    .3569137    .4790894          0          1
+  school_yrs |    793,046    13.42122    2.949902          0         20
+    coll_yrs |    793,046     1.84949    2.309418          0          8
+  coll_compl |    793,046    .2807656    .4493735          0          1
+    coll_atd |    793,046    .5362551    .4986841          0          1
+-------------+---------------------------------------------------------
+     veteran |    793,046    .3288346    .4697901          0          1
+         age |    793,046    31.41195    3.429808         26         38
+       black |    793,046     .088266    .2836815          0          1
+    other_nw |    793,046    .0452786    .2079146          0          1
+
+. 
+. *Collapse to mean by birth state and birth year
+. collapse (mean) moved_bpl school_yrs coll_yrs coll_compl coll_atd veteran age ///
+>                  black other_nw lnsize lnstatesize epop epopstate bpl_byr_bh_pop, by(bplg birthyear6m) 
+
+. 
+. *Merge in state/national induction risk by birth state and birthyear
+. merge 1:1 birthyear6m bplg using "H:\Other\Induction Data for Sharing\inductions_short6m.dta"
+(note: variable birthyear6m was int, now float to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,200  (_merge==3)
+    -----------------------------------------
+
+. 
+. ***COLLAPSED SUMMARY STATS - TABLE 1********************************************
+. 
+. *Note that these are not exact replications
+. *Mean is weighted by the birth state/birth (half) year/population
+. sum moved_bpl school_yrs coll_yrs coll_compl coll_atd veteran ///
+>                 nationalrisk6m staterisk6m age black other_nw lnsize lnstatesize ////
+>                 epop epopstate [aw = bpl_byr_bh_pop]
+
+    Variable |     Obs      Weight        Mean   Std. Dev.       Min        Max
+-------------+-----------------------------------------------------------------
+   moved_bpl |   1,200      793046    .3569137   .0774803        .15   .8378378
+  school_yrs |   1,200      793046    13.42122   .6302754      10.75   14.77966
+    coll_yrs |   1,200      793046     1.84949   .4137962   .7580645   3.067797
+  coll_compl |   1,200      793046    .2807656   .0678224        .05   .4482759
+    coll_atd |   1,200      793046    .5362551   .0971518   .1666667   .8039216
+-------------+-----------------------------------------------------------------
+     veteran |   1,200      793046    .3288346   .1177775   .0924658   .6666667
+nationalr~6m |   1,200      793046    .0585646   .0378956   .0027506   .1120752
+ staterisk6m |   1,200      793046    .0594622   .0407036   .0011085   .1532445
+         age |   1,200      793046    31.41195   3.413736         26   37.58333
+       black |   1,200      793046     .088266   .0963746          0   .4965035
+-------------+-----------------------------------------------------------------
+    other_nw |   1,200      793046    .0452786   .0878731          0    .853211
+      lnsize |   1,200      793046    10.29754   .2371426   9.834941   10.51762
+ lnstatesize |   1,200      793046    6.759535   .8219854   2.397895    8.03948
+        epop |   1,200      793046    375.5725   18.65088   346.2588   397.2564
+   epopstate |   1,200      793046    374.0523   64.81556   269.3288   1018.513
+
+. 
+. restore 
+
+. 
+. log close
+      name:  <unnamed>
+       log:  H:\Other\Induction Data for Sharing\census1980_clean.log
+  log type:  text
+ closed on:   6 Jan 2020, 15:58:07
+----------------------------------------------------------------------------------------------------------------------
