@@ -1,10 +1,10 @@
 ## Repository Structure
 *This repository contains the following directories:*
 
-- **\1980Census_Data_Setup** 
-  – Contains do-file and data sets that construct the final 1980 Census data set.
-- **\Inductions_Data_Setup** 
-  – Contains do-file and data sets that construct the final inductions data set (**inductions.dta**), as well as datasets that contain variations of measures of induction risk (see do-file for risk measures).  
+- **\1980_Census_Data**
+  - Contains do-file and data sets that construct the final 1980 Census data set.
+- **\Inductions_Data** 
+  - Contains do-file and data sets that construct the final inductions data set (**inductions.dta**), as well as datasets that contain variations of measures of induction risk (see do-file for risk measures).  
 - **\Enr_PDF_YYYY_YY**
   - Original PDF versions of school enrollment data from 1960 to 1970.
 
