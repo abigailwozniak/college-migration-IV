@@ -1,7 +1,7 @@
 capture log close
 clear all
 
-log using "H:\Other\Induction Data for Sharing\census1980_clean.log", replace
+log using "1980_Census_Data\census1980_clean.log", replace
 
 ********************************************************************************
 *Author: Zach Swaziek
@@ -19,7 +19,7 @@ log using "H:\Other\Induction Data for Sharing\census1980_clean.log", replace
 *Output: Table 1: Summary Statistics for 1980 Census
 ********************************************************************************
 
-use "H:\Other\Induction Data for Sharing\census_1980.dta" 
+use "1980_Census_Data\census_1980.dta" 
 
 rename birthyr birthyear
 
@@ -27,7 +27,7 @@ gen bplg =  bpl
 
 ***COHORT SIZE MERGE************************************************************
 
-merge m:1 birthyear bplg using "H:\Other\Induction Data for Sharing\cohortsize_c60"
+merge m:1 birthyear bplg using "1980_Census_Data\cohortsize_c60"
 drop if _merge == 2 | _merge == 1
 drop _merge
 
@@ -35,7 +35,7 @@ drop _merge
 
 *Variable for year turned 19
 gen year19 = birthyear + 19
-merge m:1 year19 bplg using "H:\Other\Induction Data for Sharing\blanchard_katz"
+merge m:1 year19 bplg using "1980_Census_Data\blanchard_katz"
 drop if _merge == 2 | _merge == 1
 drop _merge
 
@@ -179,7 +179,7 @@ collapse (mean) moved_bpl school_yrs coll_yrs coll_compl coll_atd veteran age //
 		 black other_nw lnsize lnstatesize epop epopstate bpl_byr_bh_pop, by(bplg birthyear6m) 
 
 *Merge in state/national induction risk by birth state and birthyear
-merge 1:1 birthyear6m bplg using "H:\Other\Induction Data for Sharing\inductions_short6m.dta"
+merge 1:1 birthyear6m bplg using "Induction_Risk_Data\inductions_short6m.dta"
 
 ***COLLAPSED SUMMARY STATS - TABLE 1********************************************
 
