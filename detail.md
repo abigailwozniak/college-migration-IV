@@ -13,7 +13,7 @@
 *This folder contains Stata do-files and data to construct the main 1980 Census estimating sample in Table 1 of the paper using raw Census data downloaded from IPUMS.org. It contains the following files:*
 
 - **census_1980.dta** – raw 1980 Census 5% Sample from IPUMS. The sample is restricted to men aged 25 to 40.
-- **census1980_clean.do** – cleans **census_1980.dta** and merges cohort size, employment-population, and induction data to create one of the final 1980 Census data sets (**census1980_cleaned.dta**). The do-file also creates Table 1 before saving **census1980_cleaned.dta**. The following files are merged in to create the final dat aset:
+- **census1980_clean.do** – cleans **census_1980.dta** and merges cohort size, employment-population, and induction data to create one of the final 1980 Census data sets (**census1980_cleaned.dta**). The do-file also creates Table 1 before saving **census1980_cleaned.dta**. The following files are merged in to create the final data set:
   - **blanchard_katz.dta** – state-level unemployment insurance rates (epop and epopstate) sorted by bplg and year19 
   -	**cohortsize_c60.dta** – 1960 cohort size at the birthyear and statebirthyear level (lnsize and lnstatesize) sorted by bplg and birthyear.
   - **inductions_short6m.dta** – a short version of **inductions.dta** (containing only birthyear, bplg, staterisk, nationalrisk, nationalrisk_, and risk)
