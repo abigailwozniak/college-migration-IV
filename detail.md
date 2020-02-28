@@ -2,7 +2,7 @@
 *This repository contains the following directories:*
 
 - **\1980_Census_Data**
-  - Contains do-file and data sets that construct the final 1980 Census data set.
+  - Contains do-file and data sets that construct the main 1980 Census data set used for estimation in the paper.
 - **\Inductions_Data** 
   - Contains do-file and data sets that construct the final inductions data set (**inductions.dta**), as well as datasets that contain variations of measures of induction risk (see do-file for risk measures).  
 - **\Enr_PDF_YYYY_YY**
