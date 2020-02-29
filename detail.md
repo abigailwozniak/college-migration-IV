@@ -1,4 +1,4 @@
-## Repository Structure
+﻿## Repository Structure
 *This repository contains the following directories:*
 
 - **\1980_Census_Data**
@@ -37,6 +37,6 @@
 - **inductions.xls** – national-level induction rates and cohort sizes from C&L (data from David Card) and SSS website.
 - **state_level_enrollments.xls** – state-level 10th and 11th grade enrollments from 1961-1969, and secondary totals for 1959-1960.
 - **state_level_inductions.xls** – state-level inductions from 1954-1972, raw and corrected. State level inductions processed and received in paper form from SSS in two batches. First batch reports annual induction numbers by state and year or six-month period. Second batch reports cumulative induction totals by state and year. Corrections made for obvious data entry mistakes. Edited observations are highlighted in “corrected” tab. “Inductions_final” tab contains calculated annual total inductions by state for 1955 to 1972.
-- **state_level_inductions_enrollments.xls** – final tabulations of state-level induction and enrollment counts. Combines data from state_level_inductions “Inductions_final” tab and state_level_enrollments. “Combined” tab contains state level annual induction and enrollment numbers where indYYYY is inductions from “Inductions_final” tab and enrYYYY is the following: Secondary enrollment/4 if YYYY=1959 or 1960 from state_level_enrollments, and 11th grade enrollment for YYYY=1961 to 1969. “Combined and Adjusted” tab shifts enrYYYY to enr(year 19=YYYY+2) for matching and division by year a cohort turned 19. “Combined and Adjusted” tab data form state_inductions.dta.
+- **state_level_inductions_enrollments.xls** – final tabulations of state-level induction and enrollment counts. Combines data from state_level_inductions “Inductions_final” tab and state_level_enrollments. “Combined” tab contains state level annual induction and enrollment numbers where indYYYY is inductions from “Inductions_final” tab and enrYYYY is the following: Secondary enrollment/4 if YYYY=1959 or 1960 from state_level_enrollments, and 11th grade enrollment for YYYY=1961 to 1970. “Combined and Adjusted” tab shifts enrYYYY to enr(year 19=YYYY+2) for matching and division by year a cohort turned 19. “Combined and Adjusted” tab data form state_inductions.dta.
 
 **NOTE:** There are also “AW” versions of the above, which carry the six-month level variation through instead of collapsing it.
