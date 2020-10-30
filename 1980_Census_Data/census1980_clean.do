@@ -138,7 +138,7 @@ lab var black "Black"
 *Create variable that equals 1 if other non-white, 0 if not
 *Non-white includes spanish write_in (coded as 110 in raced)
 gen other_nw = 0
-replace other_nw = 1 if raced == 110 | raced > 200 | hispand != 0
+replace other_nw = 1 if (raced == 110 | raced > 200 | hispand != 0) & raced != 200
 lab var other_nw "Other nonwhite"
 
 ***VETERAN STATUS***************************************************************

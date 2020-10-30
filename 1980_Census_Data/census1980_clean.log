@@ -1,12 +1,11 @@
-----------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  H:\Other\Induction Data for Sharing\census1980_clean.log
+       log:  H:\Other\Paper Codes for Uploading\education-migration-IV\1980_Census_Data\census1980_clean.log
   log type:  text
- opened on:   6 Jan 2020, 15:56:47
+ opened on:  30 Oct 2020, 11:15:12
 
 . 
 . ********************************************************************************
-. *Author: Zach Swaziek
 . *Date: January 2020
 . *
 . *This do-file recreates Table 1 in "The Impact of College on Migration:
@@ -21,7 +20,7 @@
 . *Output: Table 1: Summary Statistics for 1980 Census
 . ********************************************************************************
 . 
-. use "H:\Other\Induction Data for Sharing\census_1980.dta" 
+. use census_1980.dta
 
 . 
 . rename birthyr birthyear
@@ -32,7 +31,7 @@
 . 
 . ***COHORT SIZE MERGE************************************************************
 . 
-. merge m:1 birthyear bplg using "H:\Other\Induction Data for Sharing\cohortsize_c60"
+. merge m:1 birthyear bplg using cohortsize_c60.dta
 
     Result                           # of obs.
     -----------------------------------------
@@ -54,7 +53,7 @@
 . *Variable for year turned 19
 . gen year19 = birthyear + 19
 
-. merge m:1 year19 bplg using "H:\Other\Induction Data for Sharing\blanchard_katz"
+. merge m:1 year19 bplg using blanchard_katz.dta
 
     Result                           # of obs.
     -----------------------------------------
@@ -410,8 +409,8 @@ Valid   100 white                                       |     799409      87.42 
 . *Non-white includes spanish write_in (coded as 110 in raced)
 . gen other_nw = 0
 
-. replace other_nw = 1 if raced == 110 | raced > 200 | hispand != 0
-(43,873 real changes made)
+. replace other_nw = 1 if (raced == 110 | raced > 200 | hispand != 0) & raced != 200
+(43,137 real changes made)
 
 . lab var other_nw "Other nonwhite"
 
@@ -523,7 +522,7 @@ Valid   0 entered as written                              |     792821      98.5
      veteran |    793,046    .3288346    .4697901          0          1
          age |    793,046    31.41195    3.429808         26         38
        black |    793,046     .088266    .2836815          0          1
-    other_nw |    793,046    .0452786    .2079146          0          1
+    other_nw |    793,046    .0446569    .2065496          0          1
 
 . 
 . *Collapse to mean by birth state and birth year
@@ -532,7 +531,7 @@ Valid   0 entered as written                              |     792821      98.5
 
 . 
 . *Merge in state/national induction risk by birth state and birthyear
-. merge 1:1 birthyear6m bplg using "H:\Other\Induction Data for Sharing\inductions_short6m.dta"
+. merge 1:1 birthyear6m bplg using inductions_short6m.dta
 (note: variable birthyear6m was int, now float to accommodate using data's values)
 
     Result                           # of obs.
@@ -564,7 +563,7 @@ nationalr~6m |   1,200      793046    .0585646   .0378956   .0027506   .1120752
          age |   1,200      793046    31.41195   3.413736         26   37.58333
        black |   1,200      793046     .088266   .0963746          0   .4965035
 -------------+-----------------------------------------------------------------
-    other_nw |   1,200      793046    .0452786   .0878731          0    .853211
+    other_nw |   1,200      793046    .0446569   .0879172          0    .853211
       lnsize |   1,200      793046    10.29754   .2371426   9.834941   10.51762
  lnstatesize |   1,200      793046    6.759535   .8219854   2.397895    8.03948
         epop |   1,200      793046    375.5725   18.65088   346.2588   397.2564
@@ -576,7 +575,7 @@ nationalr~6m |   1,200      793046    .0585646   .0378956   .0027506   .1120752
 . 
 . log close
       name:  <unnamed>
-       log:  H:\Other\Induction Data for Sharing\census1980_clean.log
+       log:  H:\Other\Paper Codes for Uploading\education-migration-IV\1980_Census_Data\census1980_clean.log
   log type:  text
- closed on:   6 Jan 2020, 15:58:07
-----------------------------------------------------------------------------------------------------------------------
+ closed on:  30 Oct 2020, 11:15:55
+-------------------------------------------------------------------------------------------------------------------------------------------------
